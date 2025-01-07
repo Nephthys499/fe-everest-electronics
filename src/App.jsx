@@ -1,4 +1,8 @@
 import { Input } from "@nextui-org/react";
+import NavbarComponent from "./components/NavbarComponent";
+import HeroSection from "./components/HeroSection";
+import ProductPage from "./components/ProductPage";
+
 function App() {
   return (
     <>
@@ -6,7 +10,10 @@ function App() {
       {/* //line of pages */}
       {/* //line of component */}
       {/* //line of pages */}
-      <Input label="Email" placeholder="Enter your email" type="text" className="border-2 border-red-500" />
+      <NavbarComponent />
+      <HeroSection />
+      <ProductPage />
+      {/* <Input label="Email" placeholder="Enter your email" type="text" className="border-2 border-red-500" /> */}
     </>
   );
 }
