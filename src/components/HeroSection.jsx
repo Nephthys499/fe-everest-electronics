@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "@nextui-org/react";
 import eveMont from "../assets/eveMont.jpg";
 

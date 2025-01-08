@@ -8,12 +8,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import InfoIcon from "@mui/icons-material/Info";
 
 const AllProduct = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [products, setProducts] = useState([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
+  const [selectedProduct, setSelectedProduct] = useState(null); 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   // Function to fetch data from API
   const fetchProducts = async (search = "") => {
@@ -38,14 +39,24 @@ const AllProduct = () => {
 
   // useEffect to call API when the component mounts or when the search term changes
   useEffect(() => {
-    fetchProducts(searchTerm);
-  }, [searchTerm]);
+    fetchProducts();
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // If loading
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div class="loader"></div>
+        <div className="loader"></div>
       </div>
     );
   }
@@ -60,9 +71,17 @@ const AllProduct = () => {
   }
 
   // Function to handle product click
-  const handleArrowClick = product => {
+  const handleArrowClick = (product) => {
     setSelectedProduct(product);
     setIsPopupOpen(true);
+  };
+
+  //top
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -167,6 +186,17 @@ const AllProduct = () => {
           open={isPopupOpen}
           onClose={() => setIsPopupOpen(false)}
         />
+      )}
+
+      {showBackToTop && (
+        <button
+          onClick={scrollToTop}
+          className="flex justify-center items-center gap-2 fixed bottom-8 right-8 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-all duration-300 z-50"
+          aria-label="Back to top"
+        >
+          <span className="text-2xl">↑</span>
+          Kembali ke atas
+        </button>
       )}
     </div>
   );

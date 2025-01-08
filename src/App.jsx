@@ -2,14 +2,14 @@ import { Routes, Route } from "react-router-dom";
 import NavbarComponent from "./components/NavbarComponent";
 import HeroSection from "./components/HeroSection";
 import ProductPage from "./components/ProductPage";
-import AllProduct from "./pages/AllProduct";
+import AllProduct from "./pages/allProduct";
+import "./App.css";
 
 function App() {
   return (
     <>
       <NavbarComponent />
       <Routes>
-
         <Route
           path="/"
           element={
