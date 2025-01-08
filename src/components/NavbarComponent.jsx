@@ -7,7 +7,7 @@ const NavbarComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { name: 'BERANDA', href: '#' },
+    { name: 'BERANDA', href: '/' },
     { name: 'PEMESANAN', href: '#pemesanan' },
     { name: 'DAFTAR CLIENT KAMI', href: '#daftar-client-kami' },
     { name: 'TENTANG KAMI', href: '#tentang-kami' },

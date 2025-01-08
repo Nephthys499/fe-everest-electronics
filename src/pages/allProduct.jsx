@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import api from "../api/produkApi"; // Pastikan path ini sesuai lokasi file apiService.js
+import api from "../api/produkApi"; 
 import { formatRupiah } from "../utils/formatCurrency";
-import PopupProduct from "./popupProduct";
-
-const ProductPage = () => {
-  const [products, setProducts] = useState([]); // State untuk menyimpan data produk
-  const [loading, setLoading] = useState(true); // State untuk loading
-  const [error, setError] = useState(null); // State untuk error
-  const [selectedProduct, setSelectedProduct] = useState(null); // State untuk produk yang dipilih
+import PopupProduct from "../components/popupProduct";
+import SearchIcon from '@mui/icons-material/Search'; 
+const AllProduct = () => {
+  const [products, setProducts] = useState([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
+  const [selectedProduct, setSelectedProduct] = useState(null); 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); 
 
-  // Fungsi untuk fetch data dari API
-  const fetchProducts = async () => {
+  // Function to fetch data from API
+  const fetchProducts = async (search = "") => {
     console.log("Fetching products...");
     try {
-      const response = await api.get("/eusvc/Products/seeItemAll/limit/10");
+      const response = await api.get(`/eusvc/Products/seeItemAll/search/${search}`);
       console.log("Full response:", response);
 
       const fetchedProducts = response?.data?.data || [];
@@ -30,12 +31,12 @@ const ProductPage = () => {
     }
   };
 
-  // useEffect untuk memanggil API saat komponen pertama kali di-mount
+  // useEffect to call API when the component mounts or when the search term changes
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    fetchProducts(searchTerm); 
+  }, [searchTerm]);
 
-  // Jika sedang loading
+  // If loading
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -44,7 +45,7 @@ const ProductPage = () => {
     );
   }
 
-  // Jika terjadi error
+  // If there is an error
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -53,7 +54,7 @@ const ProductPage = () => {
     );
   }
 
-  // Function to handle arrow click
+  // Function to handle product click
   const handleArrowClick = product => {
     setSelectedProduct(product);
     setIsPopupOpen(true);
@@ -61,9 +62,9 @@ const ProductPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section with Background */}
+      
       <div className="relative h-[300px] bg-cover bg-center">
-        {/* Breadcrumb */}
+     
         <div className="absolute top-4 left-4 text-white">
           <div className="flex items-center space-x-2 text-sm">
             <span className="hover:text-blue-300 cursor-pointer">Home</span>
@@ -86,14 +87,25 @@ const ProductPage = () => {
 
       {/* Products Grid */}
       <div className="max-w-7xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold mb-8">Products</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">All Products</h2>
+          <div className="flex items-center border rounded-lg w-fit">
+            <SearchIcon className=" m-2 w-full text-gray-500" />
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="p-2 outline-none"
+            />
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.length > 0 ? (
             products.map(product => (
-              <div
-                key={product.id}
+              <div key={product.id}
                 className="group bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer"
-                onClick={() => handleArrowClick(product)} // Trigger popup on click
+                onClick={() => handleArrowClick(product)} 
               >
                 <div className="aspect-square flex items-center justify-center mb-4">
                   <img
@@ -143,14 +155,6 @@ const ProductPage = () => {
           )}
         </div>
       </div>
-      <div className="mt-8 text-center">
-        <Link
-          to="all-products"
-          className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-        >
-          See All Products
-        </Link>
-      </div>
 
       {/* Popup for Product Details */}
       {selectedProduct && (
@@ -164,4 +168,4 @@ const ProductPage = () => {
   );
 };
 
-export default ProductPage;
+export default AllProduct;
