@@ -106,12 +106,6 @@ const PopupProduct = ({ product, open, onClose }) => {
                 </tbody>
               </table>
             </div>
-            <button
-              onClick={close}
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              Close
-            </button>
           </div>
         )}
       </Popup>
