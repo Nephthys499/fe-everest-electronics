@@ -39,7 +39,15 @@ const AllProduct = () => {
 
   // useEffect to call API when the component mounts or when the search term changes
   useEffect(() => {
-    fetchProducts();
+    const delayDebounceFn = setTimeout(() => {
+      fetchProducts(searchTerm); // Fetch products based on the search term
+    }, 300); // Adjust the debounce delay as needed
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
+
+  // useEffect to handle scroll for back to top button
+  useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 300) {
         setShowBackToTop(true);
@@ -76,7 +84,7 @@ const AllProduct = () => {
     setIsPopupOpen(true);
   };
 
-  //top
+  // Function to scroll to the top
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -112,7 +120,7 @@ const AllProduct = () => {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">All Products</h2>
           <div className="flex items-center border rounded-lg w-fit">
-            <SearchIcon className=" m-2 w-full text-gray-500" />
+            <SearchIcon className="m-2 w-full text-gray-500" />
             <input
               type="text"
               placeholder="Search products..."
@@ -147,7 +155,7 @@ const AllProduct = () => {
                     className="ml-auto cursor-pointer"
                     onClick={() => handleArrowClick(product)}
                   >
-                    <InfoIcon/>
+                    <InfoIcon />
                   </span>
                 </div>
                 <div className="text-gray-500 text-sm">
