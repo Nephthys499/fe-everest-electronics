@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import api from "../api/produkApi"; // Pastikan path ini sesuai lokasi file apiService.js
+import api from "../api/produkApi"; 
 import { formatRupiah } from "../utils/formatCurrency";
 import PopupProduct from "./popupProduct";
 import { Button } from "@nextui-org/react";
+import '../index.css'
+import InfoIcon from "@mui/icons-material/Info";
+
+
 
 const ProductPage = () => {
-  const [products, setProducts] = useState([]); // State untuk menyimpan data produk
-  const [loading, setLoading] = useState(true); // State untuk loading
-  const [error, setError] = useState(null); // State untuk error
-  const [selectedProduct, setSelectedProduct] = useState(null); // State untuk produk yang dipilih
+  const [products, setProducts] = useState([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
+  const [selectedProduct, setSelectedProduct] = useState(null); 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   // Fungsi untuk fetch data dari API
@@ -40,7 +44,7 @@ const ProductPage = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Loading...</p>
+        <div class="loader"></div>
       </div>
     );
   }
@@ -113,7 +117,7 @@ const ProductPage = () => {
                     className="ml-auto cursor-pointer"
                     onClick={() => handleArrowClick(product)}
                   >
-                    →
+                    <InfoIcon/>
                   </span>
                 </div>
                 <div className="text-gray-500 text-sm">
