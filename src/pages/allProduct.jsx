@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import api from "../api/produkApi"; 
+import { useEffect, useState } from "react";
+import api from "../api/produkApi";
 import { formatRupiah } from "../utils/formatCurrency";
 import PopupProduct from "../components/popupProduct";
-import SearchIcon from '@mui/icons-material/Search'; 
+import SearchIcon from "@mui/icons-material/Search";
 const AllProduct = () => {
-  const [products, setProducts] = useState([]); 
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(null); 
-  const [selectedProduct, setSelectedProduct] = useState(null); 
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(""); 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   // Function to fetch data from API
   const fetchProducts = async (search = "") => {
     console.log("Fetching products...");
     try {
-      const response = await api.get(`/eusvc/Products/seeItemAll/search/${search}`);
+      const response = await api.get(
+        `/eusvc/Products/seeItemAll/search/${search}`
+      );
       console.log("Full response:", response);
 
       const fetchedProducts = response?.data?.data || [];
@@ -33,8 +35,18 @@ const AllProduct = () => {
 
   // useEffect to call API when the component mounts or when the search term changes
   useEffect(() => {
-    fetchProducts(searchTerm); 
-  }, [searchTerm]);
+    fetchProducts();
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // If loading
   if (loading) {
@@ -55,16 +67,22 @@ const AllProduct = () => {
   }
 
   // Function to handle product click
-  const handleArrowClick = product => {
+  const handleArrowClick = (product) => {
     setSelectedProduct(product);
     setIsPopupOpen(true);
   };
 
+  //top
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
-      
       <div className="relative h-[300px] bg-cover bg-center">
-     
         <div className="absolute top-4 left-4 text-white">
           <div className="flex items-center space-x-2 text-sm">
             <span className="hover:text-blue-300 cursor-pointer">Home</span>
@@ -102,10 +120,11 @@ const AllProduct = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.length > 0 ? (
-            products.map(product => (
-              <div key={product.id}
+            products.map((product) => (
+              <div
+                key={product.id}
                 className="group bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer"
-                onClick={() => handleArrowClick(product)} 
+                onClick={() => handleArrowClick(product)}
               >
                 <div className="aspect-square flex items-center justify-center mb-4">
                   <img
@@ -163,6 +182,17 @@ const AllProduct = () => {
           open={isPopupOpen}
           onClose={() => setIsPopupOpen(false)}
         />
+      )}
+
+      {showBackToTop && (
+        <button
+          onClick={scrollToTop}
+          className="flex justify-center items-center gap-2 fixed bottom-8 right-8 bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-all duration-300 z-50"
+          aria-label="Back to top"
+        >
+          <span className="text-2xl">↑</span>
+          Kembali ke atas
+        </button>
       )}
     </div>
   );

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/produkApi"; // Pastikan path ini sesuai lokasi file apiService.js
 import { formatRupiah } from "../utils/formatCurrency";
 import PopupProduct from "./popupProduct";
+import { Button } from "@nextui-org/react";
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]); // State untuk menyimpan data produk
@@ -54,7 +55,7 @@ const ProductPage = () => {
   }
 
   // Function to handle arrow click
-  const handleArrowClick = product => {
+  const handleArrowClick = (product) => {
     setSelectedProduct(product);
     setIsPopupOpen(true);
   };
@@ -64,7 +65,7 @@ const ProductPage = () => {
       {/* Hero Section with Background */}
       <div className="relative h-[300px] bg-cover bg-center">
         {/* Breadcrumb */}
-        <div className="absolute top-4 left-4 text-white">
+        <div className="absolute top-4 left-4 text-blue-500">
           <div className="flex items-center space-x-2 text-sm">
             <span className="hover:text-blue-300 cursor-pointer">Home</span>
             <span>›</span>
@@ -89,10 +90,10 @@ const ProductPage = () => {
         <h2 className="text-2xl font-bold mb-8">Products</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.length > 0 ? (
-            products.map(product => (
+            products.map((product) => (
               <div
                 key={product.id}
-                className="group bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer"
+                className="group bg-white p-6 rounded-2xl shadow-2xl hover:shadow-md transition-shadow duration-300 cursor-pointer"
                 onClick={() => handleArrowClick(product)} // Trigger popup on click
               >
                 <div className="aspect-square flex items-center justify-center mb-4">
@@ -142,14 +143,24 @@ const ProductPage = () => {
             </p>
           )}
         </div>
-      </div>
-      <div className="mt-8 text-center">
-        <Link
-          to="all-products"
-          className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-        >
-          See All Products
-        </Link>
+        <div className="flex justify-center mt-20 ">
+          <Button variant="ghost" color="primary" type="button">
+            <Link
+              to="all-products"
+              className="min-w-36 flex items-center justify-center gap-2 text-md p-4"
+            >
+              See All Products
+              <svg
+                width="1em"
+                height="1em"
+                fill="currentColor"
+                viewBox="0 0 1024 1024"
+              >
+                <path d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 0 0-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z" />
+              </svg>
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Popup for Product Details */}
