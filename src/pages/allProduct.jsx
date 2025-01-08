@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import api from "../api/produkApi"; 
+import api from "../api/produkApi";
+import "../index.css";
 import { formatRupiah } from "../utils/formatCurrency";
 import PopupProduct from "../components/popupProduct";
-import SearchIcon from '@mui/icons-material/Search'; 
+import SearchIcon from "@mui/icons-material/Search";
+import InfoIcon from "@mui/icons-material/Info";
+
 const AllProduct = () => {
-  const [products, setProducts] = useState([]); 
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(null); 
-  const [selectedProduct, setSelectedProduct] = useState(null); 
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(""); 
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Function to fetch data from API
   const fetchProducts = async (search = "") => {
     console.log("Fetching products...");
     try {
-      const response = await api.get(`/eusvc/Products/seeItemAll/search/${search}`);
+      const response = await api.get(
+        `/eusvc/Products/seeItemAll/search/${search}`
+      );
       console.log("Full response:", response);
 
       const fetchedProducts = response?.data?.data || [];
@@ -33,14 +38,14 @@ const AllProduct = () => {
 
   // useEffect to call API when the component mounts or when the search term changes
   useEffect(() => {
-    fetchProducts(searchTerm); 
+    fetchProducts(searchTerm);
   }, [searchTerm]);
 
   // If loading
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Loading...</p>
+        <div class="loader"></div>
       </div>
     );
   }
@@ -62,9 +67,7 @@ const AllProduct = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      
       <div className="relative h-[300px] bg-cover bg-center">
-     
         <div className="absolute top-4 left-4 text-white">
           <div className="flex items-center space-x-2 text-sm">
             <span className="hover:text-blue-300 cursor-pointer">Home</span>
@@ -95,7 +98,7 @@ const AllProduct = () => {
               type="text"
               placeholder="Search products..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
               className="p-2 outline-none"
             />
           </div>
@@ -103,9 +106,10 @@ const AllProduct = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.length > 0 ? (
             products.map(product => (
-              <div key={product.id}
-                className="group bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer"
-                onClick={() => handleArrowClick(product)} 
+              <div
+                key={product.id}
+                className="card group bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer"
+                onClick={() => handleArrowClick(product)}
               >
                 <div className="aspect-square flex items-center justify-center mb-4">
                   <img
@@ -124,7 +128,7 @@ const AllProduct = () => {
                     className="ml-auto cursor-pointer"
                     onClick={() => handleArrowClick(product)}
                   >
-                    →
+                    <InfoIcon/>
                   </span>
                 </div>
                 <div className="text-gray-500 text-sm">
